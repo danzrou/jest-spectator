@@ -1,31 +1,19 @@
-import { TestBed, async } from '@angular/core/testing';
+import { Spectator } from '@ngneat/spectator';
+import { createComponentFactory } from '@ngneat/spectator/jest';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  let spectator: Spectator<AppComponent>;
+  const createComponent = createComponentFactory(AppComponent);
+  
+  beforeEach(() => spectator = createComponent());
+  
+  it('should have h1 title', () => {
+    const title = spectator.component.title;
+    expect(spectator.query('h1').textContent).toContain(title);
   });
-
-  it(`should have as title 'jest-spectator'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('jest-spectator');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to jest-spectator!');
+  
+  it('should have 3 list items', () => {
+    expect(spectator.queryAll('li').length).toEqual(3);
   });
 });
