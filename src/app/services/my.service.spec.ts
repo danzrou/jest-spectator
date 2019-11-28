@@ -16,6 +16,7 @@ describe('MyService', () => {
   
   it('should return DepService', () => {
     const depService = spectator.get(DepService);
-    expect(depService).toBeDefined();
+    depService.getName.mockReturnValue('DepService');
+    expect(spectator.service.getDepName()).toEqual('DepService');
   });
 });
