@@ -1,5 +1,7 @@
+import { fakeAsync, tick } from '@angular/core/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { DepService, MyService } from './my.service';
+import createSpy = jasmine.createSpy;
 
 describe('MyService', () => {
   let spectator: SpectatorService<MyService>;
@@ -19,4 +21,12 @@ describe('MyService', () => {
     depService.getName.mockReturnValue('DepService');
     expect(spectator.service.getDepName()).toEqual('DepService');
   });
+  
+  it('observable should be called once', fakeAsync(() => {
+    const spy = createSpy('asyncValue');
+    spectator.service.getAsyncValue().subscribe(spy);
+    expect(spy).toHaveBeenCalledTimes(1);
+    tick(301);
+    expect(spy).toHaveBeenCalledTimes(2);
+  }));
 });
