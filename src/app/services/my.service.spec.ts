@@ -1,15 +1,11 @@
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { DepService, MyService } from './my.service';
 
 describe('MyService', () => {
   let spectator: SpectatorService<MyService>;
   const createService = createServiceFactory<MyService>({
     service: MyService,
-    providers: [mockProvider(DepService, {
-      getName(): string {
-        return 'DepService';
-      }
-    })]
+    mocks: [DepService]
   });
   
   beforeEach(() => spectator = createService());
